@@ -1,5 +1,5 @@
 # R_Prog_A3
-Johns Hopkins / Coursera R Programming Assignment 2
+Johns Hopkins / Coursera R Programming Assignment 3
 
 This project satisfies, in part, the requirements of Assignment 3 from
 the R Programming Course of the Johns Hopkins University 
