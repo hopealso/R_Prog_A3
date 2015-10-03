@@ -1,17 +1,3 @@
-## This script satisfies, in part, the requirements of Assignment 3 from
-## the R Programming Course of the Johns Hopkins University 
-## Specialization in Data Science hosted on Coursera.org.
-
-## The best, rankhospital, and rankall functions provide answers to queries 
-## against data found at the the Hospital Compare web site 
-## (http://hospitalcompare.hhs.gov) run by the U.S. Dept of Health and 
-## Human Services. The data provides information about the quality of care 
-## at over 4,000 Medicare-certified hospitals in the U.S.
-
-## Prior to calling these functions, the files hospital-data.csv
-## and outcome-of-care-measures.csv must be downloaded into the R working
-## directory.
-
 best <- function(state, outcome) {
     ## Read outcome data
     ## Check that state and outcome are valid
@@ -20,6 +6,20 @@ best <- function(state, outcome) {
     
     ## state is a 2-character abbreviated name of a state
     ## outcome is a character matching the values of either 
-    ## 
+    ##  'heart attack', 'heart failure', or 'pneumonia', each
+    ##  representing column name roots in the source data file.
     
+    ## ---- Validation ----
+    
+    
+    ## ---- Processing ----
+    x <- strsplit(outcome," ")[[1]]
+    Outcome.Title <- paste(toupper(substring(x,1,1)), substring(x,2), sep="", collapse = ".")
+    
+    Mort.Rate.Name <- paste("Hospital.30.Day.Death..Mortality..Rates.from.",Outcome.Title,sep = "")
+
+    rates <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+    rates[,Mort.Rate.Name] <- sub("Not Available",NA,rates[,Mort.Rate.Name])
+    rates[,Mort.Rate.Name] <- as.numeric(rates[,Mort.Rate.Name])
+
 }
