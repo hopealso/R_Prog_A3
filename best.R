@@ -8,13 +8,12 @@ best <- function(state, outcome) {
     ## outcome is a character matching the values of either 
     ##  'heart attack', 'heart failure', or 'pneumonia', each
     ##  representing column name roots in the source data file.
-    
+
     
     # Validate outcome
     if (!(outcome %in% c("heart attack", "heart failure", "pneumonia"))) {
         stop("invalid outcome")
     }
-    
     
     # ---- Import ----
     
@@ -32,14 +31,13 @@ best <- function(state, outcome) {
 
     # browser()
         
+    # ---- Processing ----
+
     # Validate state
     if (!(state %in% rates$State)) {
         stop("invalid state")
     }
-
-
-    # ---- Processing ----
-
+    
     # Filter data frame to state
     rates <- subset(rates, State == state, c("Hospital.Name", "State", Mort.Rate.Name))
     
