@@ -26,6 +26,12 @@ best <- function(state, outcome) {
     rates[,Mort.Rate.Name] <- as.numeric(rates[,Mort.Rate.Name])
     
     # Filter data frame to state
-    rates <- subset(rates,State==toupper(state),c("Hospital.Name",State,Mort.Rate.Name))
+    rates <- subset(rates,State==toupper(state),c("Hospital.Name", "State", Mort.Rate.Name))
+    
+    
+    # Sort by Mortality Rate, Hospital Name
+    rates <- rates[order(rates[[Mort.Rate.Name]],rates[["Hospital.Name"]]),]
+    
     # browser()
+    return(rates[1,1])
 }
