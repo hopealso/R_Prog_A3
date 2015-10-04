@@ -35,13 +35,11 @@ rankall <- function(outcome, num = "best") {
     numstates <- nlevels(rates$State)
     result <- data.frame(hospital=character(numstates), state=character(numstates))
     
-    #browser()
-    
     # Create function to return nth row of given data set or NA
     nthstate <- function(df) {
         #browser()
-        nthrow <- switch(num, "best"=1, "worst"=nrow(df), num)
-        
+        nthrow <- switch(as.character(num), "best"=1, "worst"=nrow(na.omit(df)), num)
+
         if (nthrow > nrow(df)) {
             return(data.frame(Hospital.Name=NA, State=df$State[1]))
         } else {    
@@ -55,7 +53,6 @@ rankall <- function(outcome, num = "best") {
     #result <- do.call("rbind", test)
     result <- do.call("rbind", lapply(split(rates, rates$State), nthstate))
     
-    #browser()
     return(result)
 
 }

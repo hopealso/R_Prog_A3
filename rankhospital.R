@@ -31,7 +31,7 @@ rankhospital <- function(state, outcome, num = "best") {
     rates[,Mort.Rate.Name] <- sub("Not Available", NA, rates[,Mort.Rate.Name])
     rates[,Mort.Rate.Name] <- as.numeric(rates[,Mort.Rate.Name])
     
-    browser()
+    #rowser()
     
     # ---- Processing ----
     
