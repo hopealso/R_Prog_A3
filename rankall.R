@@ -24,8 +24,8 @@ rankall <- function(outcome, num = "best") {
 
     # Read file and clean strings in relevant column, converting to NA values
     #rates <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
-    rates <- read.csv("outcome-of-care-measures.csv", colClasses = Spec)
     #rates <- read.csv("outcome-of-care-measures.csv")
+    rates <- read.csv("outcome-of-care-measures.csv", colClasses = Spec)
     rates[,Mort.Rate.Name] <- sub("Not Available", NA, rates[,Mort.Rate.Name])
     rates[,Mort.Rate.Name] <- as.numeric(rates[,Mort.Rate.Name])
     
@@ -34,27 +34,28 @@ rankall <- function(outcome, num = "best") {
     # Add rank column
     rates$rank <- 0
     
-    # Add ranks to rank column
-    #getrank <- function (state) {
-    #    stateset <- subset(rates, State == state)
-    #    order(statest[[Mort.Rate.Name]], stateset[["Hospital.Name"]])
-    #}
-    
-    getrank <- function(df) {
+    # Create function to add ranks to a given df which includes only one state
+    setrank <- function(df) {
         #browser()
-        df$rank <- order(df[[Mort.Rate.Name]], df[["Hospital.Name"]])
-        #browser()
-        df
+        #df$rank <- order(df[[Mort.Rate.Name]], df[["Hospital.Name"]])
+        df <- df[order(df[[Mort.Rate.Name]], df[["Hospital.Name"]]), ]
+        df$rank <- 1:nrow(df)
+        browser()
+        return(df)
     }
     
-    #test <- tapply(rates, rates$State, getrank)
-    
-    browser()
+    #browser()
     
     stateset <- split(rates, rates$State)
-    test <- lapply(stateset, getrank)
-    result <- do.call("rbind", test)
-    
-    browser()
-    
+    test <- lapply(stateset, setrank)
+    ranked.rates <- do.call("rbind", test)
+    #ranked.rates <- do.call("rbind", lapply(split(rates, rates$State), setrank))
+
+    result <- ranked.rates[ranked.rates$rank==num, c("Hospital.Name","State")]
+    colnames(result) <- c("hospital","state")
+    rownames(result) <- result$state
+        
+    #browser()
+    return(result)
+
 }
