@@ -31,14 +31,14 @@ rankall <- function(outcome, num = "best") {
     
     # Initialize result data file
     numstates <- nlevels(rates$State)
-    result <- data.frame(hospital=character(numstates), state=character(numstates))
+    result <- data.frame(Hospital.Name=character(numstates), State=character(numstates))
 
-    # Create function to return nth row of given data set or NA
+    # Create function to return nth row of given data set or NA row
     nthstate <- function(df) {
         nthrow <- switch(as.character(num), "best"=1, "worst"=nrow(na.omit(df)), num)
 
         if (nthrow > nrow(df)) {
-            return(data.frame(Hospital.Name=NA, State=df$State[1]))
+            data.frame(Hospital.Name=NA, State=df$State[1])
         } else {    
             df[order(df[[Mort.Rate.Name]], df[["Hospital.Name"]])[nthrow], c("Hospital.Name","State")]
         }

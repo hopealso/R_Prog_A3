@@ -47,11 +47,13 @@ rankhospital <- function(state, outcome, num = "best") {
     
     # Check num for result to return
     if (as.character(num)=="worst") {
+        
         # Sort by Mortality Rate desc, Hospital Name asc
         rates <- rates[order(-rates[[Mort.Rate.Name]], rates[["Hospital.Name"]]), ]
         return(as.character(rates[1,1]))
 
     } else {
+        
         # Sort by Mortality Rate asc, Hospital Name asc
         rates <- rates[order(rates[[Mort.Rate.Name]], rates[["Hospital.Name"]]), ]
     
