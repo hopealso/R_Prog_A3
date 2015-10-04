@@ -25,12 +25,9 @@ best <- function(state, outcome) {
     
     # Read file and clean strings in relevant column, converting to NA values
     rates <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
-    #rates <- read.csv("outcome-of-care-measures.csv")
     rates[,Mort.Rate.Name] <- sub("Not Available", NA, rates[,Mort.Rate.Name])
     rates[,Mort.Rate.Name] <- as.numeric(rates[,Mort.Rate.Name])
 
-    # browser()
-        
     # ---- Processing ----
 
     # Validate state
@@ -44,6 +41,5 @@ best <- function(state, outcome) {
     # Sort by Mortality Rate, Hospital Name
     rates <- rates[order(rates[[Mort.Rate.Name]], rates[["Hospital.Name"]]), ]
     
-    #return(as.character(rates[1,1]))
     return(rates[1,1])
 }

@@ -26,12 +26,9 @@ rankhospital <- function(state, outcome, num = "best") {
     Mort.Rate.Name <- paste("Hospital.30.Day.Death..Mortality..Rates.from.", Outcome.Title, sep = "")
     
     # Read file and clean strings in relevant column, converting to NA values
-    #rates <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
     rates <- read.csv("outcome-of-care-measures.csv")
     rates[,Mort.Rate.Name] <- sub("Not Available", NA, rates[,Mort.Rate.Name])
     rates[,Mort.Rate.Name] <- as.numeric(rates[,Mort.Rate.Name])
-    
-    #rowser()
     
     # ---- Processing ----
     
@@ -50,13 +47,11 @@ rankhospital <- function(state, outcome, num = "best") {
     
     # Check num for result to return
     if (as.character(num)=="worst") {
-        
         # Sort by Mortality Rate desc, Hospital Name asc
         rates <- rates[order(-rates[[Mort.Rate.Name]], rates[["Hospital.Name"]]), ]
         return(as.character(rates[1,1]))
 
     } else {
-        
         # Sort by Mortality Rate asc, Hospital Name asc
         rates <- rates[order(rates[[Mort.Rate.Name]], rates[["Hospital.Name"]]), ]
     
@@ -65,8 +60,6 @@ rankhospital <- function(state, outcome, num = "best") {
         } else {
             return(as.character(rates[num,1]))
         }
-        
-        # return(rates[num,1])
     }
     
 }

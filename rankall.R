@@ -23,8 +23,6 @@ rankall <- function(outcome, num = "best") {
               rep(c("character", rep("NULL", 5)),3), rep("NULL", 6*3))
 
     # Read file and clean strings in relevant column, converting to NA values
-    #rates <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
-    #rates <- read.csv("outcome-of-care-measures.csv")
     rates <- read.csv("outcome-of-care-measures.csv", colClasses = Spec)
     rates[,Mort.Rate.Name] <- sub("Not Available", NA, rates[,Mort.Rate.Name])
     rates[,Mort.Rate.Name] <- as.numeric(rates[,Mort.Rate.Name])
@@ -34,25 +32,25 @@ rankall <- function(outcome, num = "best") {
     # Initialize result data file
     numstates <- nlevels(rates$State)
     result <- data.frame(hospital=character(numstates), state=character(numstates))
-    
+
     # Create function to return nth row of given data set or NA
     nthstate <- function(df) {
-        #browser()
         nthrow <- switch(as.character(num), "best"=1, "worst"=nrow(na.omit(df)), num)
 
         if (nthrow > nrow(df)) {
             return(data.frame(Hospital.Name=NA, State=df$State[1]))
         } else {    
-            hold <- df[order(df[[Mort.Rate.Name]], df[["Hospital.Name"]])[nthrow], c("Hospital.Name","State")]
+            df[order(df[[Mort.Rate.Name]], df[["Hospital.Name"]])[nthrow], c("Hospital.Name","State")]
         }
-        #browser()
     }
     
+    # Call function on a list of data frames split by state
     #stateset <- split(rates, rates$State)
     #test <- lapply(stateset, nthstate)
     #result <- do.call("rbind", test)
     result <- do.call("rbind", lapply(split(rates, rates$State), nthstate))
     
+    colnames(result) <- c("hospital","state")
     return(result)
 
 }
