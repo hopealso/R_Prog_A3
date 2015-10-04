@@ -31,30 +31,30 @@ rankall <- function(outcome, num = "best") {
     
     # ---- Processing ----
     
-    # Add rank column
-    rates$rank <- 0
-    
-    # Create function to add ranks to a given df which includes only one state
-    setrank <- function(df) {
-        #browser()
-        #df$rank <- order(df[[Mort.Rate.Name]], df[["Hospital.Name"]])
-        df <- df[order(df[[Mort.Rate.Name]], df[["Hospital.Name"]]), ]
-        df$rank <- 1:nrow(df)
-        browser()
-        return(df)
-    }
+    # Initialize result data file
+    numstates <- nlevels(rates$State)
+    result <- data.frame(hospital=character(numstates), state=character(numstates))
     
     #browser()
     
-    stateset <- split(rates, rates$State)
-    test <- lapply(stateset, setrank)
-    ranked.rates <- do.call("rbind", test)
-    #ranked.rates <- do.call("rbind", lapply(split(rates, rates$State), setrank))
-
-    result <- ranked.rates[ranked.rates$rank==num, c("Hospital.Name","State")]
-    colnames(result) <- c("hospital","state")
-    rownames(result) <- result$state
+    # Create function to return nth row of given data set or NA
+    nthstate <- function(df) {
+        #browser()
+        nthrow <- switch(num, "best"=1, "worst"=nrow(df), num)
         
+        if (nthrow > nrow(df)) {
+            return(data.frame(Hospital.Name=NA, State=df$State[1]))
+        } else {    
+            hold <- df[order(df[[Mort.Rate.Name]], df[["Hospital.Name"]])[nthrow], c("Hospital.Name","State")]
+        }
+        #browser()
+    }
+    
+    #stateset <- split(rates, rates$State)
+    #test <- lapply(stateset, nthstate)
+    #result <- do.call("rbind", test)
+    result <- do.call("rbind", lapply(split(rates, rates$State), nthstate))
+    
     #browser()
     return(result)
 
