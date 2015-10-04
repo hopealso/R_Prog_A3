@@ -16,9 +16,8 @@ rankhospital <- function(state, outcome, num = "best") {
     if (!(outcome %in% c("heart attack", "heart failure", "pneumonia"))) {
         stop("invalid outcome")
     }
-    
 
-        # ---- Import ----
+    # ---- Import ----
     
     # Turn outcome input into relevant column name 
     x <- strsplit(outcome," ")[[1]]
@@ -45,7 +44,7 @@ rankhospital <- function(state, outcome, num = "best") {
     rates <- subset(rates, State == state, c("Hospital.Name", "State", Mort.Rate.Name))
     
     # Validate num
-    if (is.integer(num)) {
+    if (is.numeric(num)) {
         if (num > nlevels(rates$State)) return(NA)
     }
     
